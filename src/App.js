@@ -41,8 +41,8 @@ export default props => {
           path="/"
           render={List}
         />
-        <Route exact path="/🪐/:name" render={() => <Planet />} />
-        <Route exact path="/🪐🪐/:name" component={Planet}/>
+        <Route exact path="/🪐🪐/:name" render={() => <Planet />} />
+        <Route exact path="/🪐/:name" component={Planet}/>
       </Switch>
     </div>
   );

@@ -40,8 +40,6 @@ class Planet extends React.Component {
         <h1>Hello {this.state.planetName}!!</h1>
       );
     }
-/*export default props => {
-  return <h1>Hello {props.name}!</h1>;
-};*/
+
 }
 export default Planet;

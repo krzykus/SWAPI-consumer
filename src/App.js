@@ -4,46 +4,30 @@ import Planet from './Planet';
 import List from './List';
 import './App.css';
 
-/*function App() {
+export default props => {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Welcome to SWAPI Consumer!
         </p>
-        <Planet name="Earth" />
+        <ul>
+          <li>
+            <NavLink to="/">Home</NavLink>
+          </li>
+          <li>
+            <NavLink to="/🪐/yavin">Yavin</NavLink>
+          </li>
+          <li>
+            <NavLink to="/🪐/middleearth">Middle Earth</NavLink>
+          </li>
+        </ul>
+
+        <Switch>
+          <Route exact path="/" render={List}/>
+          <Route exact path="/🪐/:name" component={Planet}/>
+        </Switch>
       </header>
-    </div>
-  );
-}
-
-export default App;*/
-
-export default props => {
-  return (
-    <div>
-      <ul>
-        <li>
-          <NavLink to="/">Home</NavLink>
-        </li>
-        <li>
-          <NavLink to="/🪐/yavin">Yavin</NavLink>
-        </li>
-        <li>
-          <NavLink to="/🪐/middleearth">Middle Earth</NavLink>
-        </li>
-      </ul>
-
-      <Switch>
-        <Route
-          exact
-          path="/"
-          render={List}
-        />
-        <Route exact path="/🪐🪐/:name" render={() => <Planet />} />
-        <Route exact path="/🪐/:name" component={Planet}/>
-      </Switch>
     </div>
   );
 };

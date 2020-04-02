@@ -30,7 +30,7 @@ class Planet extends React.Component {
                 else
                 {
                     console.log(planetData.err);
-                    this.setState({error: true, errorCode:404});
+                    this.setState({planetName,error: true, errorCode:404});
                     //handle error here
                 }
             });
@@ -50,7 +50,7 @@ class Planet extends React.Component {
                     else
                     {
                         console.log(planetData.err);
-                        this.setState({error: true,errorCode:404});
+                        this.setState({planetName,error: true, errorCode:404});
                         //handle error here
                     }
                 });
@@ -62,7 +62,7 @@ class Planet extends React.Component {
     render(){
         if(this.state.planetData && !this.state.error)
         {
-            const { Climate, Population, Film } = this.state.planetData;
+            const { Climate, Population, Films } = this.state.planetData;
             return(
                 <div>
                 <h1>

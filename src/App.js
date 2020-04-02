@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, NavLink } from 'react-router-dom';
 import Planet from './Planet';
-import List from './List';
+import Main from './Main';
 import './App.css';
 
 export default props => {
@@ -24,7 +24,7 @@ export default props => {
         </ul>
 
         <Switch>
-          <Route exact path="/" render={List}/>
+          <Route exact path="/" render={Main}/>
           <Route exact path="/🪐/:name" component={Planet}/>
         </Switch>
       </header>

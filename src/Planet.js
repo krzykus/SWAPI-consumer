@@ -1,44 +1,93 @@
 import React from 'react';
+import axios from 'axios';
 
+const getData = async name => {
+    try {
+        let url = 'http://localhost:3001/planets/'+name;
+        let response = await axios.get(url);
+        let data = response.data;
+        return {data,callError:false};
+    } catch (err) {
+        return {err, callError: true};
+    }
+}
 class Planet extends React.Component {
     constructor(){
         super();
-        this.state = {}
+        this.state = {loading:true}
     }
+
     componentWillReceiveProps(nextProps) {
-        console.log(this.context);
-        console.log(this.props)
-        //console.log(currentRouteName);
-        console.log(nextProps)
+        this.setState({loading:true})
         if(this.state.planetName!=nextProps.match.params.name){
             const planetName = nextProps.match.params.name;
-            //Call API
-            this.setState({ planetName, loading: false });
-        }
-        if( false ) {
-          let newState = Object.assign({}, this.state);
-          //this.setState({ nextState });
+            getData(planetName).then(planetData =>{
+                if(!planetData.callError)
+                {
+                    planetData = planetData.data;
+                    this.setState({ planetName,planetData, loading: false, error: false });
+                }
+                else
+                {
+                    console.log(planetData.err);
+                    this.setState({error: true, errorCode:404});
+                    //handle error here
+                }
+            });
         }
       }
     componentDidMount = () => {
-        console.log(this.props);
+        this.setState({loading:true})
         if (this.props.match.params) {
-            try {
-                console.log(this.props.match.params.name)
+            try {//Too many nested stuff need to refactor and duplicate code
                 const planetName = this.props.match.params.name;
-                //TODO: Call API here
-                this.setState({ planetName, loading: false });
+                getData(planetName).then(planetData =>{
+                    if(!planetData.callError)
+                    {
+                        planetData = planetData.data;
+                        this.setState({ planetName,planetData, loading: false, error: false });
+                    }
+                    else
+                    {
+                        console.log(planetData.err);
+                        this.setState({error: true,errorCode:404});
+                        //handle error here
+                    }
+                });
             } catch (err) {
                 this.setState({ loading: false, error: true });
             }
         }
     }
     render(){
-        console.log('Render');
-        console.log(this.state.planetName)
-      return(
-        <h1>Hello {this.state.planetName}!!</h1>
-      );
+        if(this.state.planetData && !this.state.error)
+        {
+            const { Climate, Population, Film } = this.state.planetData;
+            return(
+                <div>
+                <h1>
+                    <p>Hello from {this.state.planetName}!</p>
+                </h1>
+                <div>
+                    <span>{Climate}, {Population}</span>
+                    <span>Films</span>
+                </div>
+            </div>
+        );
+        }
+        else if(this.state.error)
+        {
+            //Create component for error or redirect
+            return(
+                <div>We encountered an error: {this.state.errorCode}</div>
+            );
+        }
+        else if(this.state.loading)
+        {
+            return(
+                <div><img src="/loading.gif"/></div>    
+            );
+        }
     }
 
 }

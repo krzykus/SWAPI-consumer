@@ -1,6 +1,6 @@
 import React from 'react';
 
-function App() {
+function Main() {
   return (
         <p>
           Hi! Please choose a planet
@@ -8,4 +8,4 @@ function App() {
   );
 }
 
-export default App;
+export default Main;

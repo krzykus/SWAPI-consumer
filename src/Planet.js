@@ -1,27 +1,31 @@
 import React from 'react';
 import axios from 'axios';
+import Loading from './components/Loading';
+import Movie from './Movie';
 
-const getData = async name => {
-    try {
-        let url = 'http://localhost:3001/planets/'+name;
-        let response = await axios.get(url);
-        let data = response.data;
-        return {data,callError:false};
-    } catch (err) {
-        return {err, callError: true};
-    }
-}
+ 
 class Planet extends React.Component {
     constructor(){
         super();
         this.state = {loading:true}
     }
 
+    getData = async name => {
+        try {
+            let url = 'http://localhost:3001/planets/'+name;
+            let response = await axios.get(url);
+            let data = response.data;
+            return {data,callError:false};
+        } catch (err) {
+            return {err, callError: true};
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState({loading:true})
         if(this.state.planetName!=nextProps.match.params.name){
             const planetName = nextProps.match.params.name;
-            getData(planetName).then(planetData =>{
+            this.getData(planetName).then(planetData =>{
                 if(!planetData.callError)
                 {
                     planetData = planetData.data;
@@ -36,12 +40,13 @@ class Planet extends React.Component {
             });
         }
       }
+      
     componentDidMount = () => {
         this.setState({loading:true})
         if (this.props.match.params) {
             try {//Too many nested stuff need to refactor and duplicate code
                 const planetName = this.props.match.params.name;
-                getData(planetName).then(planetData =>{
+                this.getData(planetName).then(planetData =>{
                     if(!planetData.callError)
                     {
                         planetData = planetData.data;
@@ -70,7 +75,15 @@ class Planet extends React.Component {
                 </h1>
                 <div>
                     <span>{Climate}, {Population}</span>
-                    <span>Films</span>
+                    <div>
+                    {
+                        Films.map((key, index) => {
+                            return (
+                                <Movie movieData={Films[index]} key={index} />
+                            );
+                        })
+                    }
+                    </div>
                 </div>
             </div>
         );
@@ -85,7 +98,7 @@ class Planet extends React.Component {
         else if(this.state.loading)
         {
             return(
-                <div><img src="/loading.gif"/></div>    
+                <Loading />
             );
         }
     }

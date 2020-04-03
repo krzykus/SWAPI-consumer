@@ -1,8 +1,53 @@
+.App.container {
+  margin-top: 1rem;
+}
+
 /* Nav css */
-@media (min-width: 750px) {
-  h3 {
-    text-align: center;
+.desktop {
+  display:none;
+}
+.mobile {
+  display:block;
+}
+.navbar {
+  overflow: hidden;
+  position: relative;
+}
+.navbar-list {
+  display: none;
+  list-style: none;
+}
+.navbar-link {
+  color: black;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  display: block;
+}
+.navbar-link.active {
+  color: #33C3F0; 
+}
+.navbar-list a:hover {
+  background-color: #33C3F0;
+  color: black;
+}
+
+h3 {
+  text-align: center;
+}
+@media (max-width: 749px) {
+  .navbar.mobile {
+    background-color: #eae9ea;
+    border-bottom: #dad9da 1px solid;
   }
+  .navbar-link {
+    padding: 7px 0;
+  }
+  .navbar-list {
+    margin-top: 1.5rem;
+  }
+}
+@media (min-width: 750px) {
   .navbar {
     display: block;
     width: 100%;
@@ -16,7 +61,6 @@
     width: 100%; }
   .navbar-list {
     display: inline-block;
-    list-style: none;
     margin-bottom: 0; }
   .navbar-item {
     position: relative;
@@ -28,9 +72,12 @@
     font-weight: 600;
     letter-spacing: .2rem;
     margin: 0 18px;
-    text-decoration: none;
     line-height: 6.5rem;
     color: #222; }
-  .navbar-link.active {
-    color: #33C3F0; }
+    .desktop {
+      display: block;
+    }
+    .mobile{
+      display:none;
+    }
 }

@@ -1,0 +1,16 @@
+.card {
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
+}
+.card-container {
+    padding: 1rem;
+}
+.card-container > h1 {
+    font-size: 1.8rem;
+}
+.card-container > h5 {
+    font-size: 1.5rem;
+}
+.card-container > h1, .card-container > h5 {
+    margin: 0;
+}

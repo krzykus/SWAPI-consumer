@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import Loading from './components/Loading';
-import Movie from './Movie';
+import MovieRow from './components/MovieRow';
+import './Planet.css';
 
  
 class Planet extends React.Component {
@@ -10,7 +11,7 @@ class Planet extends React.Component {
         this.state = {loading:true}
     }
 
-    getData = async name => {
+    callURL = async name => {
         try {
             let url = 'http://localhost:3001/planets/'+name;
             let response = await axios.get(url);
@@ -20,85 +21,87 @@ class Planet extends React.Component {
             return {err, callError: true};
         }
     }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({loading:true})
-        if(this.state.planetName!=nextProps.match.params.name){
-            const planetName = nextProps.match.params.name;
-            this.getData(planetName).then(planetData =>{
+    getData = planetName => {
+        try {
+            this.callURL(planetName).then(planetData =>{
                 if(!planetData.callError)
                 {
                     planetData = planetData.data;
-                    this.setState({ planetName,planetData, loading: false, error: false });
+                    this.setState({ planetName,planetData, step:"content" });
                 }
                 else
                 {
-                    console.log(planetData.err);
-                    this.setState({planetName,error: true, errorCode:404});
+                    this.setState({planetName,step:"error", errorCode:404});
                     //handle error here
                 }
             });
+        } catch (err) {
+            this.setState({ step:"error",errorCode:500 });
+        }
+    }
+
+    rowArray = arr => {
+        let perRow = 2;
+        let chunks = arr.map( function(key,i){ 
+            return i%perRow===0 ? arr.slice(i,i+perRow) : null; 
+        }).filter(function(e){ return e; });
+        return chunks;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({step:"loading"})
+        if(this.state.planetName!=nextProps.match.params.name){
+            const planetName = nextProps.match.params.name;
+            this.getData(planetName);
         }
       }
       
     componentDidMount = () => {
-        this.setState({loading:true})
+        this.setState({step:"loading"})
         if (this.props.match.params) {
-            try {//Too many nested stuff need to refactor and duplicate code
-                const planetName = this.props.match.params.name;
-                this.getData(planetName).then(planetData =>{
-                    if(!planetData.callError)
-                    {
-                        planetData = planetData.data;
-                        this.setState({ planetName,planetData, loading: false, error: false });
-                    }
-                    else
-                    {
-                        console.log(planetData.err);
-                        this.setState({planetName,error: true, errorCode:404});
-                        //handle error here
-                    }
-                });
-            } catch (err) {
-                this.setState({ loading: false, error: true });
-            }
+            const planetName = this.props.match.params.name;
+            this.getData(planetName);
         }
     }
     render(){
-        if(this.state.planetData && !this.state.error)
+        if(this.state.step=="loading")
+        {
+            return(
+                <Loading />
+            );
+        }
+        else if(this.state.step=="content")
         {
             const { Climate, Population, Films } = this.state.planetData;
+            const movieRows = this.rowArray(Films);
+            let moviesDisplay = movieRows.map((key, index) => {
+                return (
+                    <MovieRow rowData={movieRows[index]} key={index} />
+                );
+            })
             return(
                 <div>
-                <h1>
-                    <p>Hello from {this.state.planetName}!</p>
+                <h1 className="hello-world">
+                    Hello from {this.state.planetName}!
                 </h1>
                 <div>
-                    <span>{Climate}, {Population}</span>
-                    <div>
-                    {
-                        Films.map((key, index) => {
-                            return (
-                                <Movie movieData={Films[index]} key={index} />
-                            );
-                        })
-                    }
-                    </div>
+                    <div className="infoBar">Climate: {Climate}, Population: {Population}</div>
+                    {moviesDisplay}
                 </div>
             </div>
         );
         }
-        else if(this.state.error)
+        else if(this.state.step=="error")
         {
             //Create component for error or redirect
             return(
                 <div>We encountered an error: {this.state.errorCode}</div>
             );
         }
-        else if(this.state.loading)
+        else
         {
             return(
-                <Loading />
+                <div></div>
             );
         }
     }

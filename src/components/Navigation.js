@@ -14,6 +14,12 @@ const Navigation = ({className}) => {
           <NavLink to="/🪐/yavin" className="navbar-link">Yavin</NavLink>
         </li>
         <li className="navbar-item">
+          <NavLink to="/🪐/tatooine" className="navbar-link">Tatooine</NavLink>
+        </li>
+        <li className="navbar-item">
+          <NavLink to="/🪐/alderaan" className="navbar-link">Alderaan</NavLink>
+        </li>
+        <li className="navbar-item">
           <NavLink to="/🪐/middleearth" className="navbar-link">Middle-earth</NavLink>
         </li>
       </ul>
